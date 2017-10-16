@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ section }}</title>
-</head>
-<body>
+{% extends "calculate/base.html" %}
+
+{% block title %}
+{{ section }}
+{% endblock %}
+
+{% block content %}
+
     <h1> {{ section }}</h1>
-    Percentage: {{ section.percentage }}%
-</body>
-</html>
+    <p>Percentage: {{ section.percentage }}%</p>
+    <button class="btn btn-info">Edit</button>
+
+{% endblock %}

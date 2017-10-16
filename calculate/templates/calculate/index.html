@@ -1,18 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Calculate</title>
-</head>
-<body>
-{% if sections_list %}
+{% extends "calculate/base.html" %}
+
+{% block title %}
+Calculate
+{% endblock %}
+
+{% block content %}
+
+    <h2><a href="{% url 'calculate:add' %}">Add</a></h2>
+    <br/>
+    {% if section_list %}
+        <div class="container">
+            {% for section in section_list %}
+            <div class="row">
+                <div class="col">
+                    <a href="{% url 'calculate:detail' section.id %}">{{ section.section_text }}</a>
+                </div>
+                <div class="col">
+                    Add
+                </div>
+                <div class="col">
+                    Delete
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No sections are available.</p>
+    {% endif %}
+    <br/>
+    <h3>To do</h3>
     <ul>
-    {% for section in sections_list %}
-        <li><a href="{% url 'calculate::detail' section.id %}">{{ sections.section_text }}</a></li>
-    {% endfor %}
+        <li>Add two values to each section (mark/out of)</li>
+        <li>Delete section function</li>
+        <li>Edit section function</li>
+        <li>Add section to a section, referenced by foreign key</li>
+        <li>Add course model, course can have multiple sections</li>
     </ul>
-{% else %}
-    <p>No sections are available.</p>
-{% endif %}
-</body>
-</html>
+
+{% endblock %}
