@@ -1,4 +1,6 @@
 from django.conf.urls import url
+from django.views.generic import ListView, DetailView
+from .models import Section
 
 from . import views
 

@@ -1,6 +1,7 @@
-from django.db import models
-from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
+from django.forms import ModelForm
+from django.utils.translation import ugettext_lazy as _
 
 
 # user: spysauce
@@ -17,3 +18,15 @@ class Section(models.Model):
 
     def __str__(self):
         return self.section_text
+
+
+class SectionForm(ModelForm):
+    class Meta:
+        model = Section
+        fields = ['section_text', 'percentage']
+        labels = {
+            'percentage': _('Percentage'),
+        }
+        help_texts = {
+            'percentage': _('Your mark percentage for this section in the course.'),
+        }

@@ -1,22 +1,16 @@
 {% extends "calculate/base.html" %}
 
-{% load bootstrap3 %}
-
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-
-{% bootstrap_messages %}
-
 {% block title %}
 Add Section
 {% endblock %}
 
 {% block content %}
-
-    {% buttons %}
-    <button type="submit" class="btn btn-primary">
-        {% bootstrap_icon "star" %} Submit
-    </button>
-    {% endbuttons %}
+    <h1>Add Section</h1>
+    <form action="{% url 'calculate:add' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="section_text" id="section_text" value="" />
+        <input type="number" name="percentage" id="percentage" value="100" />
+        <input type="submit" name="submit" value="Add Section" class="btn btn-info" />
+    </form>
 
 {% endblock %}
