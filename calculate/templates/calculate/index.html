@@ -1,18 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Calculate</title>
-</head>
-<body>
-{% if sections_list %}
-    <ul>
-    {% for section in sections_list %}
-        <li><a href="{% url 'calculate::detail' section.id %}">{{ sections.section_text }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No sections are available.</p>
-{% endif %}
-</body>
-</html>
+{% extends "calculate/base.html" %}
+
+{% block title %}
+Calculate
+{% endblock %}
+
+{% block content %}
+
+    <h2></h2><a href="{% url 'calculate:add' %}">Add</a></h2>
+
+    {% if section_list %}
+        <ul>
+        {% for section in section_list %}
+            <li><a href="{% url 'calculate:detail' section.id %}">{{ section.section_text }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No sections are available.</p>
+    {% endif %}
+
+{% endblock %}

@@ -6,9 +6,9 @@ from .models import Section
 
 # Create your views here.
 def index(request):
-    type_list = Section.objects.all()[:5]
+    section_list = Section.objects.all()[:5]
     context = {
-        'type_list': type_list,
+        'section_list': section_list,
     }
     return render(request, 'calculate/index.html', context)
 
@@ -19,3 +19,7 @@ def detail(request, section_id):
     except Section.DoesNotExist:
         raise Http404("Section does not exist")
     return render(request, 'calculate/detail.html', {'section': section})
+
+
+def add(request):
+    return render(request, 'calculate/add.html')

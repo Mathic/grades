@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% block includes %}{% endblock %}
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/' %}"
+</head>
+<body>
+{% block content %}{% endblock %}
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <p>Copyright &copy; Riza Baltazar 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
