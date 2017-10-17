@@ -6,11 +6,18 @@ Add Section
 
 {% block content %}
     <h1>Add Section</h1>
-    <form action="{% url 'calculate:add' %}" method="POST">
+    <form action="{% url 'calculate:add_section' %}" method="POST">
         {% csrf_token %}
         <input type="text" name="section_text" id="section_text" value="" />
         <input type="number" name="percentage" id="percentage" value="100" />
-        <input type="submit" name="submit" value="Add Section" class="btn btn-info" />
+        <input type="submit" name="submit" value="Add Section" class="btn btn-primary" />
     </form>
+
+    <br/>
+
+    <h3>To do</h3>
+    <ul>
+        <li>Make sure this references course pk</li>
+    </ul>
 
 {% endblock %}
