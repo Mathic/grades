@@ -1,9 +1,11 @@
+from .models import Assignment, Course, Section
+from .forms import AssignmentForm, CourseForm, SectionForm
+
+from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import DeleteView
 from django.urls import reverse
-
-from .models import Section, SectionForm, Course, CourseForm
 
 
 # Create your views here.
@@ -51,16 +53,26 @@ def section_details(request, section_id):
     return render(request, 'calculate/section_details.html', {'section': section})
 
 
-def add_section(request):
+def add_section(request, s_type, pk):
+    context = {
+        's_type': s_type,
+        'pk': pk,
+    }
+
     if request.method == 'POST':
         section_form = SectionForm(request.POST)
-        if section_form.is_valid():
+        if s_type == 'Course':
+            #section_form.course.id = pk
+            test = 'poop'
+        if s_type == 'Section':
+            section_form.Section.id = pk
 
+        if section_form.is_valid():
             section_form.save()
             return HttpResponseRedirect('/calculate')
-    else:
-        section_form = SectionForm()
-    return render(request, 'calculate/add_section.html', {'section_form': section_form})
+        else:
+            messages.error(request, "Error")
+    return render(request, 'calculate/add_section.html', context)
 
 
 class SectionDelete(DeleteView):

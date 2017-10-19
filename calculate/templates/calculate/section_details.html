@@ -10,4 +10,6 @@
     <p>Percentage: {{ section.percentage }}%</p>
     <button class="btn btn-info">Edit</button>
 
+    <h2><a href="{% url 'calculate:add_section' section.type section.id %}">Add Section</a></h2>
+
 {% endblock %}

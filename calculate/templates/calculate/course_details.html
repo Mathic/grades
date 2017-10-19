@@ -10,7 +10,7 @@
 <button class="btn btn-info">Edit</button>
 <p>Course code: {{ course.course_code }}</p>
 <br/>
-<h2><a href="{% url 'calculate:add_section' %}">Add Section</a></h2>
+<h2><a href="{% url 'calculate:add_section' course.type course.id %}">Add Section</a></h2>
 <br/>
 {% if section_list %}
 <div class="container">

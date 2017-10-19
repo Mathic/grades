@@ -18,5 +18,7 @@ urlpatterns = [
     url(r'^section_details/(?P<section_id>[0-9]+)/$', views.section_details, name='section_details'),
     # ex /calculate/add_section
     url(r'^add_section/$', views.add_section, name='add_section'),
+    # ex /calculate/add_section/Course/4/
+    url(r'^add_section/(?P<s_type>.+)/(?P<pk>[0-9]+)/$', views.add_section, name='add_section'),
     url(r'^delete/(?P<pk>\d+)/$', SectionDelete.as_view(), name='delete_section'),
 ]
