@@ -6,7 +6,7 @@ Add Section
 
 {% block content %}
     <h1>Add Section</h1>
-    test: {{ pk }}
+    test: {{ s_type }}
     <form action="{% url 'calculate:add_section' s_type pk %}" method="POST">
         {% csrf_token %}
         <input type="text" name="section_text" id="section_text" value="" />
@@ -26,7 +26,7 @@ Add Section
     <script>
         {% if messages %}
             {% for message in messages %}
-                alert(message);
+                alert("{{message}}");
             {% endfor %}
         {% endif %}
     </script>

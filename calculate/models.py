@@ -21,9 +21,9 @@ class Section(models.Model):
                                          MaxValueValidator(100),
                                          MinValueValidator(1)
                                      ])
-    type = models.CharField(max_length=10, default='Course')
-    models.ForeignKey('self')
-    models.ForeignKey('Course', related_name='course', on_delete=models.CASCADE)
+    type = models.CharField(max_length=10, default='Section')
+    section_fk = models.ForeignKey('self', null=True, blank=True, related_name='section', on_delete=models.CASCADE)
+    course_fk = models.ForeignKey('Course', related_name='course', on_delete=models.CASCADE, default='0')
 
     def __str__(self):
         return self.section_text
