@@ -1,0 +1,33 @@
+from calculate.models import Section, Course
+from calculate.forms import SectionForm, CourseForm
+
+c = Course.objects.get(pk=4)
+s = Section(section_text="Test", percentage=5, type="Section", course_fk=c)
+section_form = SectionForm
+section_form(section_text="Test", percentage=5, type="Section", course_fk=c)
+
+
+
+fields = ['section_text', 'percentage', 'type', 'course_fk', 'section_fk']
+labels = {
+    'percentage': _('Percentage'),
+}
+help_texts = {
+    'percentage': _('Your mark percentage for this section in the course.'),
+}
+
+def save(self, commit=True):
+    instance = super().save(commit=False)
+    cid = self.cleaned_data['course']
+    instance.course = Course.objects.get(pk=cid)
+    instance.save(commit)
+    return instance
+
+
+section_form.type = 'Section'
+if s_type == 'Course':
+    c = Course.objects.get(pk=pk)
+    section_form.course_fk = c
+if s_type == 'Section':
+    s = Section.objects.get(pk=pk)
+    section_form.section_fk = s

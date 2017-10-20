@@ -1,32 +1,94 @@
-from django.shortcuts import render
-from django.http import Http404, HttpResponseRedirect
+from .models import Assignment, Course, Section
+from .forms import AssignmentForm, CourseForm, SectionForm
 
-from .models import Section, SectionForm
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render
+from django.views.generic import DeleteView
+from django.urls import reverse
 
 
 # Create your views here.
 def index(request):
-    section_list = Section.objects.all()[:25]
+    course_list = Course.objects.all()[:25]
     context = {
-        'section_list': section_list,
+        'course_list': course_list,
     }
     return render(request, 'calculate/index.html', context)
 
 
-def detail(request, section_id):
+def course_details(request, course_id):
+    try:
+        course = Course.objects.get(pk=course_id)
+    except Course.DoesNotExist:
+        raise Http404("Course does not exist")
+
+    section_list = Section.objects.filter(course_fk=course)
+    context = {
+        'section_list': section_list,
+        'course': course,
+    }
+    return render(request, 'calculate/course_details.html', context)
+
+
+def add_course(request):
+    if request.method == 'POST':
+        course_form = CourseForm(request.POST)
+        if course_form.is_valid():
+            course_form.save()
+            return HttpResponseRedirect('/calculate')
+    else:
+        course_form = SectionForm()
+    return render(request, 'calculate/add_course.html', {'course_form': course_form})
+
+
+class CourseDelete(DeleteView):
+    model = Course
+
+    def get_success_url(self):
+        return reverse('calculate:index')
+
+
+def section_details(request, section_id):
     try:
         section = Section.objects.get(pk=section_id)
     except Section.DoesNotExist:
         raise Http404("Section does not exist")
-    return render(request, 'calculate/detail.html', {'section': section})
+
+    section_list = Section.objects.filter(section_fk=section)
+    context = {
+        'section_list': section_list,
+        'section': section,
+    }
+    return render(request, 'calculate/section_details.html', context)
 
 
-def add(request):
+def add_section(request, s_type, pk):
+    context = {
+        's_type': s_type,
+        'pk': pk,
+    }
+
     if request.method == 'POST':
-        form = SectionForm(request.POST)
-        if form.is_valid():
-            form.save()
+        section_form = SectionForm(request.POST)
+        section = section_form.save(commit=False)
+        if s_type == 'Course':
+            c = Course.objects.get(pk=pk)
+            section.course_fk = c
+        if s_type == 'Section':
+            s = Section.objects.get(pk=pk)
+            section.section_fk = s
+
+        if section_form.is_valid():
+            section_form.save()
             return HttpResponseRedirect('/calculate')
-    else:
-        form = SectionForm()
-    return render(request, 'calculate/add.html', {'form': form})
+        else:
+            raise Http404()
+
+    return render(request, 'calculate/add_section.html', context)
+
+
+class SectionDelete(DeleteView):
+    model = Section
+
+    def get_success_url(self):
+        return reverse('calculate:index')
