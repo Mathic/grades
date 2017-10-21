@@ -6,7 +6,7 @@ Calculate
 
 {% block content %}
 
-    <h2><a href="{% url 'calculate:add_course' %}">Add Course</a></h2>
+    <h4><a href="{% url 'calculate:add_course' %}">Add course</a></h4>
     <br/>
     {% if course_list %}
         <div class="container">
@@ -41,10 +41,11 @@ Calculate
         <li><strike>Delete section function</strike></li>
         <li><strike>Add section to a section, referenced by foreign key</strike></li>
         <li><strike>Add section to a course, referenced by foreign key</strike></li>
-        <li>Add assignment to a section, referenced by foreign key</li>
+        <li><strike>Create assignment page</strike></li>
+        <li><strike>Add assignment to a section, referenced by foreign key</strike></li>
         <li>Edit section, course and assignment functions</li>
         <li>Do logic for percentage and assignment calculations</li>
-        <li>Create mark page</li>
+        The rest has been moved to trello
     </ul>
 
 {% endblock %}

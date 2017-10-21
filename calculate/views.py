@@ -54,8 +54,11 @@ def section_details(request, section_id):
     except Section.DoesNotExist:
         raise Http404("Section does not exist")
 
+    assignment_list = Assignment.objects.filter(assignment_section=section)
     section_list = Section.objects.filter(section_fk=section)
+
     context = {
+        'assignment_list': assignment_list,
         'section_list': section_list,
         'section': section,
     }
@@ -89,6 +92,45 @@ def add_section(request, s_type, pk):
 
 class SectionDelete(DeleteView):
     model = Section
+
+    def get_success_url(self):
+        return reverse('calculate:index')
+
+
+def assignment_details(request, assignment_id):
+    try:
+        assignment = Assignment.objects.get(pk=assignment_id)
+    except Assignment.DoesNotExist:
+        raise Http404("Assignment does not exist")
+
+    context = {
+        'assignment': assignment,
+    }
+    return render(request, 'calculate/assignment_details.html', context)
+
+
+def add_assignment(request, pk):
+    context = {
+        'pk': pk,
+    }
+
+    if request.method == 'POST':
+        assignment_form = AssignmentForm(request.POST)
+        assignment = assignment_form.save(commit=False)
+        s = Section.objects.get(pk=pk)
+        assignment.assignment_section = s
+
+        if assignment_form.is_valid():
+            assignment_form.save()
+            return HttpResponseRedirect('/calculate')
+        else:
+            raise Http404()
+
+    return render(request, 'calculate/add_assignment.html', context)
+
+
+class AssignmentDelete(DeleteView):
+    model = Assignment
 
     def get_success_url(self):
         return reverse('calculate:index')

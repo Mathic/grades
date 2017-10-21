@@ -38,4 +38,7 @@ class Assignment(models.Model):
                                          MaxValueValidator(100),
                                          MinValueValidator(1)
                                      ])
-    models.ForeignKey('Section', on_delete=models.CASCADE)
+    assignment_section = models.ForeignKey('Section', related_name='assignment_section', on_delete=models.CASCADE, default='0')
+
+    def __str__(self):
+        return self.assignment_name

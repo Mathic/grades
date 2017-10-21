@@ -6,11 +6,10 @@ Add Section
 
 {% block content %}
     <h1>Add Section</h1>
-    test: {{ s_type }}
     <form action="{% url 'calculate:add_section' s_type pk %}" method="POST">
         {% csrf_token %}
-        <input type="text" name="section_text" id="section_text" value="" />
-        <input type="number" name="percentage" id="percentage" value="100" />
+        Name: <input type="text" name="section_text" id="section_text" value="" /><br/>
+        Percentage: <input type="number" name="percentage" id="percentage" value="100" /><br/>
         <input type="submit" name="submit" value="Add Section" class="btn btn-primary" />
     </form>
 

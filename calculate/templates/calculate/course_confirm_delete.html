@@ -1,6 +1,10 @@
-<div class="modal fade">
+{% extends "calculate/base.html" %}
+
+{% block content %}
+
     <form action="" method="post">{% csrf_token %}
         <p>Are you sure you want to delete course "{{ object }}"?</p>
         <input type="submit" value="Confirm" />
     </form>
-</div>
+
+{% endblock %}
