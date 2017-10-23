@@ -1,10 +1,8 @@
-from .models import Assignment, Course, Section
-from .forms import AssignmentForm, CourseForm, SectionForm
-
-from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
-from django.views.generic import DeleteView
 from django.urls import reverse
+from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+
+from .models import Assignment, Course, Section
 
 
 # Create your views here.
@@ -16,29 +14,33 @@ def index(request):
     return render(request, 'calculate/index.html', context)
 
 
-def course_details(request, course_id):
-    try:
-        course = Course.objects.get(pk=course_id)
-    except Course.DoesNotExist:
-        raise Http404("Course does not exist")
+class CourseDetail(DetailView):
+    model = Course
 
-    section_list = Section.objects.filter(course_fk=course)
-    context = {
-        'section_list': section_list,
-        'course': course,
-    }
-    return render(request, 'calculate/course_details.html', context)
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs['pk']
+        context = super(CourseDetail, self).get_context_data(**kwargs)
+        course = Course.objects.get(pk=pk)
+        context['section_list'] = Section.objects.filter(section_course=course)
+        context['course'] = course
+        return context
 
 
-def add_course(request):
-    if request.method == 'POST':
-        course_form = CourseForm(request.POST)
-        if course_form.is_valid():
-            course_form.save()
-            return HttpResponseRedirect('/calculate')
-    else:
-        course_form = SectionForm()
-    return render(request, 'calculate/add_course.html', {'course_form': course_form})
+class CourseCreate(CreateView):
+    model = Course
+    fields = ['course_code', 'course_text', 'atype']
+
+    def get_success_url(self):
+        return reverse('calculate:course_detail', args=[self.object.id])
+
+
+class CourseUpdate(UpdateView):
+    model = Course
+    fields = ['course_code', 'course_text']
+    template_name_suffix = '_update_form'
+
+    def get_success_url(self):
+        return reverse('calculate:course_detail', args=[self.object.id])
 
 
 class CourseDelete(DeleteView):
@@ -48,85 +50,103 @@ class CourseDelete(DeleteView):
         return reverse('calculate:index')
 
 
-def section_details(request, section_id):
-    try:
-        section = Section.objects.get(pk=section_id)
-    except Section.DoesNotExist:
-        raise Http404("Section does not exist")
+class SectionDetail(DetailView):
+    model = Section
 
-    assignment_list = Assignment.objects.filter(assignment_section=section)
-    section_list = Section.objects.filter(section_fk=section)
-
-    context = {
-        'assignment_list': assignment_list,
-        'section_list': section_list,
-        'section': section,
-    }
-    return render(request, 'calculate/section_details.html', context)
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs['pk']
+        context = super(SectionDetail, self).get_context_data(**kwargs)
+        section = Section.objects.get(pk=pk)
+        context['section_list'] = Section.objects.filter(section_section=section)
+        context['assignment_list'] = Assignment.objects.filter(assignment_section=section)
+        context['section'] = section
+        return context
 
 
-def add_section(request, s_type, pk):
-    context = {
-        's_type': s_type,
-        'pk': pk,
-    }
+class SectionCreate(CreateView):
+    model = Section
+    fields = ['section_text', 'percentage', 'section_section', 'section_course']
 
-    if request.method == 'POST':
-        section_form = SectionForm(request.POST)
-        section = section_form.save(commit=False)
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs['pk']
+        s_type = self.kwargs['s_type']
+        context = super(SectionCreate, self).get_context_data(**kwargs)
+
+        is_greater_than_100 = False
         if s_type == 'Course':
-            c = Course.objects.get(pk=pk)
-            section.course_fk = c
+            course = Course.objects.get(pk=pk)
+            self.model.section_course = course
+
+            # percentage logic
+            section_list = Section.objects.filter(section_course=course)
+            total = 0
+            for section in section_list:
+                total += section.percentage
+
+            if total > 100:
+                is_greater_than_100 = True
+            else:
+                is_greater_than_100 = False
+
         if s_type == 'Section':
             s = Section.objects.get(pk=pk)
-            section.section_fk = s
+            section.section_section = s
 
-        if section_form.is_valid():
-            section_form.save()
-            return HttpResponseRedirect('/calculate')
-        else:
-            raise Http404()
+        context['course'] = course
+        context['pk'] = pk
+        context['s_type'] = s_type
+        context['is_greater_than_100'] = is_greater_than_100
+        return context
 
-    return render(request, 'calculate/add_section.html', context)
+    def form_valid(self, form):
+        form.save()
+        return super(SectionCreate, self).form_valid(form)
+
+
+class SectionUpdate(UpdateView):
+    model = Section
+    fields = ['section_text', 'percentage', 'section_section', 'section_course']
+    template_name_suffix = '_update_form'
 
 
 class SectionDelete(DeleteView):
     model = Section
 
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs['pk']
+        context = super(SectionDelete, self).get_context_data(**kwargs)
+        context['pk'] = pk
+        return context
+
     def get_success_url(self):
         return reverse('calculate:index')
 
 
-def assignment_details(request, assignment_id):
-    try:
-        assignment = Assignment.objects.get(pk=assignment_id)
-    except Assignment.DoesNotExist:
-        raise Http404("Assignment does not exist")
-
-    context = {
-        'assignment': assignment,
-    }
-    return render(request, 'calculate/assignment_details.html', context)
+class AssignmentDetail(DetailView):
+    model = Assignment
 
 
-def add_assignment(request, pk):
-    context = {
-        'pk': pk,
-    }
+class AssignmentCreate(CreateView):
+    model = Assignment
+    fields = ['assignment_name', 'mark', 'total', 'percentage']
 
-    if request.method == 'POST':
-        assignment_form = AssignmentForm(request.POST)
-        assignment = assignment_form.save(commit=False)
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs['pk']
+        context = super(AssignmentCreate, self).get_context_data(**kwargs)
         s = Section.objects.get(pk=pk)
-        assignment.assignment_section = s
+        self.model.assignment_section = s
+        context['pk'] = pk
+        return context
 
-        if assignment_form.is_valid():
-            assignment_form.save()
-            return HttpResponseRedirect('/calculate')
-        else:
-            raise Http404()
+    def form_valid(self, form):
+        form.save()
+        return super(AssignmentCreate, self).form_valid(form)
 
-    return render(request, 'calculate/add_assignment.html', context)
+
+class AssignmentUpdate(UpdateView):
+    model = Assignment
+    fields = ['assignment_name', 'mark', 'total', 'percentage', 'assignment_section']
+    template_name_suffix = '_update_form'
 
 
 class AssignmentDelete(DeleteView):

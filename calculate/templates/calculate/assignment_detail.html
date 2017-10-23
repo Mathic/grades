@@ -9,7 +9,7 @@
 <h1> {{ assignment }}</h1>
 <p>Mark: {{ assignment.mark }} / {{ assignment.total }}</p>
 <p>Percentage: {{ assignment.percentage }}%</p>
-<button class="btn btn-info">Edit</button>
+<a href="{% url 'calculate:update_assignment' assignment.id %}" class="btn btn-info">Edit</a>
 
 <br/>
 

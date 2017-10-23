@@ -1,8 +1,6 @@
-from .models import Assignment, Course, Section
-
-from django import forms
 from django.forms import ModelForm
-from django.utils.translation import ugettext_lazy as _
+
+from .models import Assignment, Course, Section
 
 
 class CourseForm(ModelForm):

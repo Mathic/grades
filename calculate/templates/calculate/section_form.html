@@ -8,8 +8,7 @@ Add Section
     <h1>Add Section</h1>
     <form action="{% url 'calculate:add_section' s_type pk %}" method="POST">
         {% csrf_token %}
-        Name: <input type="text" name="section_text" id="section_text" value="" /><br/>
-        Percentage: <input type="number" name="percentage" id="percentage" value="100" /><br/>
+        {{form.as_p}}
         <input type="submit" name="submit" value="Add Section" class="btn btn-primary" />
     </form>
 
@@ -19,15 +18,5 @@ Add Section
     <ul>
         <li>Make sure this references course pk</li>
     </ul>
-
-    {{form.as_p}}
-
-    <script>
-        {% if messages %}
-            {% for message in messages %}
-                alert("{{message}}");
-            {% endfor %}
-        {% endif %}
-    </script>
 
 {% endblock %}
