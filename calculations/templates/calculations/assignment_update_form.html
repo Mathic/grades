@@ -1,25 +1,25 @@
-{% extends 'calculate/base.html' %}
+{% extends "calculations/base.html" %}
 
 {% block content %}
 {% load crispy_forms_tags %}
 
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
-        <form action="" method="post">
+        <form action="" method="POST">
             {% csrf_token %}
             <div class="modal-header">
                 <a type="button" class="close button" data-dismiss="modal" aria-hidden="true"
-                        href="{% url 'calculate:course_detail' section.section_course.id %}">×</a>
-                <h4 class="modal-title" id="section-modal-label">Update {{ section.section_name }}</h4>
+                   href="{% url 'calculations:view_course' assignment.assignment_course.id %}">×</a>
+                <h4 class="modal-title" id="section-modal-label">Update Assignment</h4>
             </div>
             <div class="modal-body">
-                {{ form.as_p }}
+                {{form.as_p}}
             </div>
             <div class="modal-footer">
-                <input type="submit" value="Update" />
+                <input type="submit" name="submit" value="Update Assignment" />
             </div>
         </form>
     </div>
 </div>
 
-{% endblock content %}
+{% endblock %}

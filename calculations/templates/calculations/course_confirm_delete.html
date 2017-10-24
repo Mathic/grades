@@ -1,9 +1,9 @@
-{% extends "calculate/base.html" %}
+{% extends "calculations/base.html" %}
 
 {% block content %}
 
     <form action="" method="post">{% csrf_token %}
-        <p>Are you sure you want to delete section "{{ object }}"?</p>
+        <p>Are you sure you want to delete course "{{ object }}"?</p>
         <input type="submit" value="Confirm" />
     </form>
 

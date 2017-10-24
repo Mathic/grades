@@ -1,4 +1,4 @@
-{% extends "calculate/base.html" %}
+{% extends "calculations/base.html" %}
 
 {% block title %}
 {{ assignment }}
@@ -9,7 +9,7 @@
 <h1> {{ assignment }}</h1>
 <p>Mark: {{ assignment.mark }} / {{ assignment.total }}</p>
 <p>Percentage: {{ assignment.percentage }}%</p>
-<a href="{% url 'calculate:update_assignment' assignment.id %}" class="btn btn-info">Edit</a>
+<a href="{% url 'calculations:update_assignment' assignment.id %}" class="btn btn-info">Edit</a>
 
 <br/>
 

@@ -5,27 +5,33 @@
     <title>{% block title %}{% endblock %}</title>
     {% block includes %}{% endblock %}
     {% load staticfiles %}
-    <link rel="stylesheet" href="{% static 'calculate/css/bootstrap.min.css' %}" type="text/css" />
-    <link rel="stylesheet" href="{% static 'calculate/css/bootstrap-treeview.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'calculations/css/bootstrap.min.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'calculations/css/bootstrap-treeview.css' %}" type="text/css" />
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" href="{% static 'calculate/css/sticky-footer-navbar.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'calculations/css/sticky-footer-navbar.css' %}" type="text/css" />
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
 
-    <script src="{% static 'calculate/js/jquery.js' %}"></script>
-    <script src="{% static 'calculate/js/bootstrap-treeview.js' %}"></script>
+    <script src="{% static 'calculations/js/jquery.js' %}"></script>
+    <script src="{% static 'calculations/js/bootstrap-treeview.js' %}"></script>
 </head>
 <body>
 
 <!-- Fixed navbar -->
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a class="navbar-brand" href="#">Calculate Grades</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarCollapse"
+            aria-controls="navbarCollapse"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="/calculate/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/calculations/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Test</a>

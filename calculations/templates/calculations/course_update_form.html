@@ -1,15 +1,15 @@
-{% extends "calculate/base.html" %}
+{% extends "calculations/base.html" %}
 
 {% block content %}
 {% load crispy_forms_tags %}
 
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
-        <form action="{% url 'calculate:update_course' course.id %}" method="POST">
+        <form action="{% url 'calculations:update_course' course.id %}" method="POST">
             {% csrf_token %}
             <div class="modal-header">
                 <a type="button" class="close button" data-dismiss="modal" aria-hidden="true"
-                   href="{% url 'calculate:course_detail' course.id %}">×</a>
+                   href="{% url 'calculations:view_course' course.id %}">×</a>
                 <h4 class="modal-title" id="section-modal-label">Update {{ course.course_text }}</h4>
             </div>
             <div class="modal-body">

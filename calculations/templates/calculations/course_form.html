@@ -1,4 +1,4 @@
-{% extends "calculate/base.html" %}
+{% extends "calculations/base.html" %}
 
 {% block title %}
 Add Course
@@ -9,13 +9,13 @@ Add Course
 
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
-        <form action="{% url 'calculate:add_course' %}" method="POST">
+        <form action="{% url 'calculations:add_course' %}" method="POST">
             {% csrf_token %}
             <div class="modal-header">
-            <a type="button" class="close button" data-dismiss="modal" aria-hidden="true"
-               href="{% url 'calculate:index' %}">×</a>
-            <h4 class="modal-title" id="section-modal-label">Add Course</h4>
-        </div>
+                <a type="button" class="close button" data-dismiss="modal" aria-hidden="true"
+                   href="{% url 'calculations:index' %}">×</a>
+                <h4 class="modal-title" id="section-modal-label">Add Course</h4>
+            </div>
             <div class="modal-body">
                 {{form.as_p}}
             </div>
