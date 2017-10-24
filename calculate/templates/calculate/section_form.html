@@ -5,18 +5,25 @@ Add Section
 {% endblock %}
 
 {% block content %}
-    <h1>Add Section</h1>
-    <form action="{% url 'calculate:add_section' s_type pk %}" method="POST">
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" name="submit" value="Add Section" class="btn btn-primary" />
-    </form>
+{% load crispy_forms_tags %}
 
-    <br/>
-
-    <h3>To do</h3>
-    <ul>
-        <li>Make sure this references course pk</li>
-    </ul>
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <form action="{% url 'calculate:add_section' s_type pk %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-header">
+                <a type="button" class="close button" data-dismiss="modal" aria-hidden="true"
+                   href="{% url 'calculate:course_detail' course.id %}">×</a>
+                <h4 class="modal-title" id="section-modal-label">Add Section</h4>
+            </div>
+            <div class="modal-body">
+                {{form.as_p}}
+            </div>
+            <div class="modal-footer">
+                <input type="submit" name="submit" value="Add Section" />
+            </div>
+        </form>
+    </div>
+</div>
 
 {% endblock %}

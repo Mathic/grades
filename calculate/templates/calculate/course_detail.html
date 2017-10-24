@@ -6,35 +6,105 @@
 
 {% block content %}
 
-    <h1> {{ course }}</h1>
-    <a href="{% url 'calculate:update_course' course.id %}" class="btn btn-info">Edit</a>
-    <p>Course code: {{ course.course_code }}</p>
-    <br/>
-    {% if section_list %}
-    <h2><a href="{% url 'calculate:add_section' course.atype course.id %}">Add Section</a></h2>
-    <br/>
-    <div class="container">
-        {% for section in section_list %}
-        <div class="row">
-            <div class="col col-12 col-sm-6 col-md-8">
-                {{ section.section_text }}
-            </div>
-            <div class="col">
-                <a class="btn btn-primary" href="{% url 'calculate:section_detail' section.id %}">
-                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                </a>
-            </div>
-            <div class="col">
-                <a class="btn btn-danger" href="{% url 'calculate:delete_section' section.id %}" method="POST">
-                    {% csrf_token %}
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                </a>
-            </div>
+<h1> {{ course }}</h1>
+<p>Course code: {{ course.course_code }}</p>
+<br/>
+
+<!--  Modal -->
+<div class="modal fade"
+     id="section-modal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="section-modal-label"
+     aria-hidden="true">
+</div><!-- / .modal -->
+
+<h3><a href="{% url 'calculate:add_section' course.atype course.id %}">Add Section</a></h3>
+
+{% if section_list %}
+<br/>
+<div class="container">
+    <div class="row" style="background-color: #f0f0f0;">
+        <div class="col col-12 col-sm-6 col-md-8">
+            Section
         </div>
-        {% endfor %}
+        <div class="col">%</div>
+        <div class="col">Edit</div>
+        <div class="col">Delete</div>
     </div>
-    {% else %}
-    <p>No sections are available.</p>
-    {% endif %}
+    {% for section in section_list %}
+    <div class="row">
+        <div class="col col-12 col-sm-6 col-md-8">
+            {{ section.section_name }}
+        </div>
+        <div class="col">
+            {{ section.percentage }}
+        </div>
+        <div class="col">
+            <a data-toggle="modal"
+               data-target="#section-modal"
+               title="edit section"
+               data-tooltip=""
+               class="btn btn-primary"
+               href="{% url 'calculate:update_section' section.id %}">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="col">
+            <a class="btn btn-danger" href="{% url 'calculate:delete_section' section.id %}" method="POST">
+                {% csrf_token %}
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No sections are available.</p>
+{% endif %}
+
+<br/>
+
+<div id="tree">
+
+</div>
+
+<script>
+var tree = [
+{
+    text: "Parent 1",
+    nodes: [
+      {
+        text: "Child 1",
+        nodes: [
+          {
+            text: "Grandchild 1"
+          },
+          {
+            text: "Grandchild 2"
+          }
+        ]
+      },
+      {
+        text: "Child 2"
+      }
+    ]
+    },
+    {
+    text: "Parent 2"
+    },
+    {
+    text: "Parent 3"
+    },
+    {
+    text: "Parent 4"
+    },
+    {
+    text: "Parent 5"
+    }
+];
+
+$('#tree').treeview({data: tree});
+</script>
 
 {% endblock %}

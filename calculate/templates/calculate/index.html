@@ -13,11 +13,12 @@ Calculate
             {% for course in course_list %}
             <div class="row">
                 <div class="col col-12 col-sm-6 col-md-8">
-                    {{ course.course_text }}
+                    <a href="{% url 'calculate:course_detail' course.id %}">
+                    {{ course.course_name }}
+                    </a>
                 </div>
                 <div class="col">
-                    <!-- course.id -->
-                    <a class="btn btn-primary" href="{% url 'calculate:course_detail' course.id %}">
+                    <a class="btn btn-primary" href="{% url 'calculate:update_course' course.id %}">
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                     </a>
                 </div>
@@ -33,19 +34,5 @@ Calculate
     {% else %}
         <p>No courses are available.</p>
     {% endif %}
-    <br/>
-    <h3>To do</h3>
-    <ul>
-        <li><strike>Add two values to each section (mark/out of)</strike> (created a Mark model instead)</li>
-        <li><strike>Add course model, course can have multiple sections</strike></li>
-        <li><strike>Delete section function</strike></li>
-        <li><strike>Add section to a section, referenced by foreign key</strike></li>
-        <li><strike>Add section to a course, referenced by foreign key</strike></li>
-        <li><strike>Create assignment page</strike></li>
-        <li><strike>Add assignment to a section, referenced by foreign key</strike></li>
-        <li>Edit section, course and assignment functions</li>
-        <li>Do logic for percentage and assignment calculations</li>
-        The rest has been moved to trello
-    </ul>
 
 {% endblock %}

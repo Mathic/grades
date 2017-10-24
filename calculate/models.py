@@ -7,36 +7,45 @@ from django.urls import reverse
 # password: password123
 # Create your models here.
 class Course(models.Model):
-    course_code = models.CharField(max_length=8, default='PHYS1001')
-    course_text = models.CharField(max_length=50)
+    DEFAULT_PK = 1
+    course_name = models.CharField(max_length=50)
+    course_code = models.CharField(max_length=8, unique=True)
     atype = models.CharField(max_length=10, default='Course')
 
+    def get_absolute_url(self):
+        return reverse('calculate:course_detail', kwargs={'pk': self.pk})
+
     def __str__(self):
-        return self.course_text
+        return self.course_name
 
 
 class Section(models.Model):
-    section_text = models.CharField(max_length=50)
-    percentage = models.IntegerField(default=0,
+    section_name = models.CharField(max_length=50)
+    percentage = models.IntegerField(default=100,
                                      validators=[
                                          MaxValueValidator(100),
                                          MinValueValidator(1)
                                      ])
     atype = models.CharField(max_length=10, default='Section')
     section_section = models.ForeignKey('self',
-                                        null=True,
                                         blank=True,
+                                        null=True,
                                         on_delete=models.CASCADE)
     section_course = models.ForeignKey('Course',
-                                       null=True,
                                        blank=True,
+                                       null=True,
+                                       default=Course.DEFAULT_PK,
                                        on_delete=models.CASCADE)
 
     def get_absolute_url(self):
-        return reverse('calculate:section_detail', kwargs={'pk': self.pk})
+        if self.section_course is None:
+            pk = self.section_section.pk
+        else:
+            pk = self.section_course.pk
+        return reverse('calculate:course_detail', kwargs={'pk': pk})
 
     def __str__(self):
-        return self.section_text
+        return self.section_name
 
 
 class Assignment(models.Model):

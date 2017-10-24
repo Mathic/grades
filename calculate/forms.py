@@ -6,13 +6,13 @@ from .models import Assignment, Course, Section
 class CourseForm(ModelForm):
     class Meta:
         model = Course
-        fields = ['course_code', 'course_text']
+        fields = ['course_name', 'course_code']
 
 
 class SectionForm(ModelForm):
     class Meta:
         model = Section
-        fields = ['section_text', 'percentage']
+        fields = ['section_name', 'percentage']
 
 
 class AssignmentForm(ModelForm):
