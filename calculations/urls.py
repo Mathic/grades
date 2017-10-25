@@ -1,12 +1,11 @@
 from django.conf.urls import url
 
-from . import views
 from .views import CourseCreate, CourseUpdate, CourseDelete, CourseView, \
-    AssignmentCreate, AssignmentUpdate, AssignmentDelete
+    AssignmentCreate, AssignmentUpdate, AssignmentDelete, IndexView
 
 app_name = 'calculations'
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
+    url(r'^$', IndexView.as_view(), name='index'),
 
     # ex: /calculate/course_details/5
     url(r'^view_course/(?P<pk>\d+)/$', CourseView.as_view(), name='view_course'),

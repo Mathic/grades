@@ -1,20 +1,25 @@
-from .models import Assignment, Course
-
-from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, DetailView, DeleteView, UpdateView, TemplateView
+
+from .models import Assignment, Course
 
 
 # Create your views here.
-def index(request):
-    course_list = Course.objects.all()[:25]
-    context = {
-        'course_list': course_list,
-    }
-    return render(request, 'calculations/index.html', context)
+class CourseMixin(object):
+    def get_courses(self):
+        return Course.objects.all()[:25]
+
+    def get_context_data(self, **kwargs):
+        context = super(CourseMixin, self).get_context_data(**kwargs)
+        context['courses'] = self.get_courses()
+        return context
+    
+
+class IndexView(CourseMixin, TemplateView):
+    template_name = 'calculations/index.html'
 
 
-class CourseCreate(CreateView):
+class CourseCreate(CourseMixin, CreateView):
     model = Course
     fields = ['course_name', 'course_code']
 
@@ -22,7 +27,7 @@ class CourseCreate(CreateView):
         return reverse('calculations:index')
 
 
-class CourseUpdate(UpdateView):
+class CourseUpdate(CourseMixin, UpdateView):
     model = Course
     fields = ['course_name', 'course_code']
     template_name_suffix = '_update_form'
@@ -35,14 +40,14 @@ class CourseUpdate(UpdateView):
         return context
 
 
-class CourseDelete(DeleteView):
+class CourseDelete(CourseMixin, DeleteView):
     model = Course
 
     def get_success_url(self):
         return reverse('calculations:index')
 
 
-class CourseView(DetailView):
+class CourseView(CourseMixin, DetailView):
     model = Course
 
     def get_context_data(self, **kwargs):
@@ -55,7 +60,7 @@ class CourseView(DetailView):
         return context
 
 
-class AssignmentCreate(CreateView):
+class AssignmentCreate(CourseMixin, CreateView):
     model = Assignment
     fields = ['assignment_name', 'is_section', 'mark',
               'total', 'percentage', 'assignment_self', 'assignment_course']
@@ -97,7 +102,7 @@ class AssignmentCreate(CreateView):
         return super(AssignmentCreate, self).form_valid(form)
 
 
-class AssignmentUpdate(UpdateView):
+class AssignmentUpdate(CourseMixin, UpdateView):
     model = Assignment
     fields = ['assignment_name', 'is_section', 'mark',
               'total', 'percentage', 'assignment_self',
@@ -122,7 +127,7 @@ class AssignmentUpdate(UpdateView):
         return super(AssignmentUpdate, self).form_valid(form)
 
 
-class AssignmentDelete(DeleteView):
+class AssignmentDelete(CourseMixin, DeleteView):
     model = Assignment
 
     def get_success_url(self):
