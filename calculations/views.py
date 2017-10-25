@@ -13,7 +13,7 @@ class CourseMixin(object):
         context = super(CourseMixin, self).get_context_data(**kwargs)
         context['courses'] = self.get_courses()
         return context
-    
+
 
 class IndexView(CourseMixin, TemplateView):
     template_name = 'calculations/index.html'
