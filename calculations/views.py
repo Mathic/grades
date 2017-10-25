@@ -27,6 +27,13 @@ class CourseUpdate(UpdateView):
     fields = ['course_name', 'course_code']
     template_name_suffix = '_update_form'
 
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs['pk']
+        context = super(CourseUpdate, self).get_context_data(**kwargs)
+        course = Course.objects.get(pk=pk)
+        context['course'] = course
+        return context
+
 
 class CourseDelete(DeleteView):
     model = Course
@@ -42,7 +49,8 @@ class CourseView(DetailView):
         pk = self.kwargs['pk']
         context = super(CourseView, self).get_context_data(**kwargs)
         course = Course.objects.get(pk=pk)
-        context['assignment_list'] = Assignment.objects.filter(assignment_course=course)
+        context['assignment_list'] = Assignment.objects.filter(assignment_course=course, is_section=False)
+        context['section_list'] = Assignment.objects.filter(assignment_course=course, is_section=True)
         context['course'] = course
         return context
 
@@ -119,7 +127,9 @@ class AssignmentDelete(DeleteView):
 
     def get_success_url(self):
         if self.object.assignment_course is None:
-            pk = self.object.assignment_self.pk
+            assignment = Assignment.objects.get(pk=self.object.assignment_self.pk)
+            pk = assignment.assignment_course.pk
+            return reverse('calculations:view_course', kwargs={'pk': pk})
         else:
             pk = self.object.assignment_course.pk
-        return reverse('calculations:view_course', kwargs={'pk': pk})
+            return reverse('calculations:view_course', kwargs={'pk': pk})

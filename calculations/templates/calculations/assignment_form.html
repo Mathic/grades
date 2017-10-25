@@ -1,10 +1,11 @@
-{% extends "calculations/base.html" %}
+{% extends "calculations/index.html" %}
+{% load staticfiles %}
 
 {% block title %}
 Add Assignment
 {% endblock %}
 
-{% block content %}
+{% block main %}
 {% load crispy_forms_tags %}
 
 <div class="modal-dialog modal-lg">
@@ -17,7 +18,7 @@ Add Assignment
                 <h4 class="modal-title" id="section-modal-label">Add Assignment to {{ course }}</h4>
             </div>
             <div class="modal-body">
-                {{form.as_p}}
+                {{ form.as_p }}
             </div>
             <div class="modal-footer">
                 <input type="submit" name="submit" value="Add Assignment" />
@@ -25,5 +26,11 @@ Add Assignment
         </form>
     </div>
 </div>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script src="{% static 'calculations/js/assignment_form.js' %}"></script>
 
 {% endblock %}
