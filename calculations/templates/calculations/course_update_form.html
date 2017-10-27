@@ -1,0 +1,25 @@
+{% extends "calculations/index.html" %}
+
+{% block main %}
+{% load crispy_forms_tags %}
+
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <form action="{% url 'calculations:update_course' course.id %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-header">
+                <a type="button" class="close button" data-dismiss="modal" aria-hidden="true"
+                   href="{% url 'calculations:view_course' course.id %}">×</a>
+                <h4 class="modal-title" id="section-modal-label">Update {{ course.course_name }}</h4>
+            </div>
+            <div class="modal-body">
+                {{ form.as_p }}
+            </div>
+            <div class="modal-footer">
+                <input type="submit" name="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

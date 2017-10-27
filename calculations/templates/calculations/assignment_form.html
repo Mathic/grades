@@ -1,0 +1,39 @@
+{% extends "calculations/index.html" %}
+{% load staticfiles %}
+
+{% block title %}
+Add Assignment
+{% endblock %}
+
+{% block main %}
+{% load crispy_forms_tags %}
+
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <form action="{% url 'calculations:add_assignment' is_section pk %}"
+              data-update-assignment-list-url="{% url 'calculations:update_assignment_list' %}"
+              data-check-percent-url="{% url 'calculations:check_percentages' %}"
+              method="POST" id="assignment_form">
+            {% csrf_token %}
+            <div class="modal-header">
+                <a type="button" class="close button" data-dismiss="modal" aria-hidden="true"
+                   href="{% url 'calculations:view_course' pk %}">×</a>
+                <h4 class="modal-title" id="section-modal-label">Add Assignment to {{ course }}</h4>
+            </div>
+            <div class="modal-body">
+                {{ form.as_p }}
+            </div>
+            <div class="modal-footer">
+                <input type="submit" name="submit" value="Add Assignment" />
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script src="{% static 'calculations/js/assignment_form.js' %}"></script>
+
+{% endblock %}

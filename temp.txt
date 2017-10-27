@@ -31,3 +31,17 @@ if s_type == 'Course':
 if s_type == 'Section':
     s = Section.objects.get(pk=pk)
     section_form.section_fk = s
+
+
+def get_initial(self):
+    pk = self.kwargs['pk']
+    course = Course.objects.get(pk=pk)
+    return {'assignment_course': course}
+
+def get_form(self, form_class=None):
+    pk = self.kwargs['pk']
+    course = Course.objects.get(pk=pk)
+
+    form = super(AssignmentCreate, self).get_form(form_class)
+    form.fields['assignment_self'].queryset = Assignment.objects.filter(assignment_course=course)
+    return form

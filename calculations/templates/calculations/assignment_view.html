@@ -1,0 +1,16 @@
+{% extends "calculations/index.html" %}
+
+{% block title %}
+{{ assignment }}
+{% endblock %}
+
+{% block main %}
+
+<h1> {{ assignment }}</h1>
+<p>Mark: {{ assignment.mark }} / {{ assignment.total }}</p>
+<p>Percentage: {{ assignment.percentage }}%</p>
+<a href="{% url 'calculations:update_assignment' assignment.id %}" class="btn btn-info">Edit</a>
+
+<br/>
+
+{% endblock %}
