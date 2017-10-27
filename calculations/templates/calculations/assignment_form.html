@@ -10,7 +10,7 @@ Add Assignment
 
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
-        <form action="{% url 'calculations:add_assignment' is_section pk %}" method="POST">
+        <form action="{% url 'calculations:add_assignment' is_section pk %}" data-update-assignment-list-url="{% url 'calculations:update_assignment_list' %}" method="POST">
             {% csrf_token %}
             <div class="modal-header">
                 <a type="button" class="close button" data-dismiss="modal" aria-hidden="true"

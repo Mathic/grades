@@ -29,11 +29,9 @@ class Assignment(models.Model):
                                         null=True,
                                         blank=True,
                                         limit_choices_to={'is_section': True},
+                                        verbose_name='Assignment',
                                         on_delete=models.CASCADE)
     assignment_course = models.ForeignKey('Course',
-                                          default=None,
-                                          null=True,
-                                          blank=True,
                                           on_delete=models.CASCADE)
 
     def get_absolute_url(self):

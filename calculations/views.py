@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, DeleteView, UpdateView, TemplateView
 
@@ -7,12 +8,25 @@ from .models import Assignment, Course
 # Create your views here.
 class CourseMixin(object):
     def get_courses(self):
-        return Course.objects.all()[:25]
+        return Course.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(CourseMixin, self).get_context_data(**kwargs)
         context['courses'] = self.get_courses()
         return context
+
+
+def update_assignment_list(request):
+    course_selected = request.GET.get('course_selected', None)
+    course = Course.objects.get(course_name=course_selected)
+    print(course)
+    print(assignments)
+    data = {
+        'assignments': assignments
+    }
+    if data['assignments'] is None:
+        data['error_message'] = 'No assignments found'
+    return JsonResponse(data)
 
 
 class IndexView(CourseMixin, TemplateView):
