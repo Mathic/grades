@@ -19,13 +19,33 @@ class CourseMixin(object):
 def update_assignment_list(request):
     course_selected = request.GET.get('course_selected', None)
     course = Course.objects.get(course_name=course_selected)
-    print(course)
-    print(assignments)
+    assignments = list(Assignment.objects.filter(assignment_course=course, is_section=True).values('assignment_name'))
     data = {
         'assignments': assignments
     }
     if data['assignments'] is None:
         data['error_message'] = 'No assignments found'
+    return JsonResponse(data)
+
+
+def check_percentages(request):
+    percentage = int(request.GET.get('current_percentage', None))
+    course_selected = request.GET.get('course_selected', None)
+    course = Course.objects.get(course_name=course_selected)
+    percentages = Assignment.objects.filter(assignment_course=course, is_section=True).values_list('percentage', flat=True)
+    # get total of percentages
+    for percent in percentages:
+        percentage += percent
+
+    print(percentage)
+    if percentage <= 100:
+        is_valid = True
+    else:
+        is_valid = False
+
+    data = {
+        'is_valid': is_valid
+    }
     return JsonResponse(data)
 
 
@@ -89,7 +109,7 @@ class AssignmentCreate(CourseMixin, CreateView):
         course = Course.objects.get(pk=pk)
 
         form = super(AssignmentCreate, self).get_form(form_class)
-        form.fields['assignment_self'].queryset = Assignment.objects.filter(assignment_course=course)
+        form.fields['assignment_self'].queryset = Assignment.objects.filter(assignment_course=course, is_section=True)
         return form
 
     def get_context_data(self, **kwargs):

@@ -17,7 +17,10 @@ urlpatterns = [
 
     # ex: /calculate/add_assignment/0/4/
     url(r'^add_assignment/(?P<is_section>\d+)/(?P<pk>\d+)/$', AssignmentCreate.as_view(), name='add_assignment'),
-    url(r'^ajax/update_assignment_list/', views.update_assignment_list, name='update_assignment_list'),
     url(r'^delete_assignment/(?P<pk>\d+)/$', AssignmentDelete.as_view(), name='delete_assignment'),
     url(r'^update_assignment/(?P<pk>\d+)/$', AssignmentUpdate.as_view(), name='update_assignment'),
+
+    # ajax
+    url(r'^ajax/update_assignment_list/', views.update_assignment_list, name='update_assignment_list'),
+    url(r'^ajax/check_percentages/', views.check_percentages, name='check_percentages'),
 ]
