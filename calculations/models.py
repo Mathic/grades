@@ -32,6 +32,7 @@ class Assignment(models.Model):
                                         verbose_name='Assignment',
                                         on_delete=models.CASCADE)
     assignment_course = models.ForeignKey('Course',
+                                          blank=True,
                                           on_delete=models.CASCADE)
 
     def get_absolute_url(self):

@@ -1,3 +1,4 @@
+from django.core import serializers
 from django.http import JsonResponse
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, DeleteView, UpdateView, TemplateView
@@ -49,6 +50,23 @@ def check_percentages(request):
     return JsonResponse(data)
 
 
+def view_assignments(request):
+    section_name = request.GET.get('section_name', None)
+    xml_serializer = serializers.get_serializer('xml')
+    serializer = xml_serializer()
+    print(section_name)
+    if section_name is not None:
+        section = Assignment.objects.get(assignment_name=section_name)
+        print(section.assignment_name)
+        serializer.serialize(Assignment.objects.filter(assignment_self=section, is_section=False))
+    data = {
+        'section_name': section_name,
+        'assignments': serializer.getvalue()
+    }
+    print(data.section_name)
+    return JsonResponse(data, safe=False)
+
+
 class IndexView(CourseMixin, TemplateView):
     template_name = 'calculations/index.html'
 
@@ -85,10 +103,19 @@ class CourseView(CourseMixin, DetailView):
     model = Course
 
     def get_context_data(self, **kwargs):
+        section_name = self.request.GET.get('section_name')
+        if section_name is not None:
+            section = Assignment.objects.get(assignment_name=section_name)
+            print(section.assignment_name)
+        else:
+            section = None
+
         pk = self.kwargs['pk']
         context = super(CourseView, self).get_context_data(**kwargs)
         course = Course.objects.get(pk=pk)
-        context['assignment_list'] = Assignment.objects.filter(assignment_course=course, is_section=False)
+        context['assignment_list'] = Assignment.objects.filter(assignment_self=section, is_section=False)
+        print(Assignment.objects.filter(assignment_self=section, is_section=False))
+        # context['assignment_list'] = Assignment.objects.filter(assignment_course=course, is_section=False)
         context['section_list'] = Assignment.objects.filter(assignment_course=course, is_section=True)
         context['course'] = course
         return context

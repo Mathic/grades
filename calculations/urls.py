@@ -23,4 +23,6 @@ urlpatterns = [
     # ajax
     url(r'^ajax/update_assignment_list/', views.update_assignment_list, name='update_assignment_list'),
     url(r'^ajax/check_percentages/', views.check_percentages, name='check_percentages'),
+    # (?P<section_name>\w+)
+    url(r'^ajax/view_assignments/', views.view_assignments, name='view_assignments'),
 ]

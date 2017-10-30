@@ -6,7 +6,10 @@
 
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
-        <form action="" method="POST">
+        <form action="{% url 'calculations:update_assignment' assignment.pk %}"
+              data-update-assignment-list-url="{% url 'calculations:update_assignment_list' %}"
+              data-check-percent-url="{% url 'calculations:check_percentages' %}"
+              method="POST" id="assignment_form">
             {% csrf_token %}
             <div class="modal-header">
                 <a type="button" class="close button" data-dismiss="modal" aria-hidden="true"
